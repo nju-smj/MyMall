@@ -25,6 +25,7 @@ export default {
   methods:{
     doclick(index){
       this.curIndex=index;
+      this.$emit('goodsClick', index);
     }
   }
 };
@@ -41,6 +42,7 @@ export default {
   position: sticky;
   top: 44px;
   background-color: #fff;
+  z-index: 2;
 }
 .tabControlItem span{
   padding: 6px;

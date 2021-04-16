@@ -39,10 +39,8 @@ export default {
   line-height: 40px;
   justify-content: space-around;
   font-size: 15px;
-  position: sticky;
-  top: 44px;
   background-color: #fff;
-  z-index: 2;
+  margin-bottom: 5px;
 }
 .tabControlItem span{
   padding: 6px;

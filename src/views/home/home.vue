@@ -1,6 +1,10 @@
 <template>
   <div class="home">
     <home-nav class="homeNav"><div slot="middle">蘑菇街</div></home-nav>
+    <tab-control
+        :lists="['流行', '新款', '精品']"
+        @goodsClick="goodsClick" ref="tabControl1" class="firstTabControl" v-show="isFirstTabShow"
+      ></tab-control>
     <better-scroll
       class="content"
       ref="scroll"
@@ -9,12 +13,12 @@
       @nowScroll="doNowScroll"
       @pullingUp="doPullingUp"
     >
-      <home-swiper :banner="banner"></home-swiper>
+      <home-swiper :banner="banner" @imageHasLoaded='doImageLoad'></home-swiper>
       <home-recommend :recommends="recommend"></home-recommend>
       <home-feature></home-feature>
       <tab-control
-        :lists="['流行', '精选', '新款']"
-        @goodsClick="goodsClick"
+        :lists="['流行', '新款', '精品']"
+        @goodsClick="goodsClick" ref="tabControl2"
       ></tab-control>
       <goods-list :goodsList="showItemGoods"></goods-list>
     </better-scroll>
@@ -36,6 +40,7 @@ import HomeFeature from "./childComps/homeFeature";
 
 import { getHomeMultidata, getHomeGoods } from "network/home.js";
 
+import {debounce} from 'common/tools'
 export default {
   name: "MymallHome",
   components: {
@@ -59,18 +64,39 @@ export default {
       },
       currentItem: "pop",
       isShowBackTop: false,
+      isFirstTabShow: false,
+      tabOffSetTop: 0,
+      leavePosY: 0
     };
   },
   created() {
     this.getHomeMultidata();
+
     this.getHomeGoods("pop");
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
+  },
+  mounted(){
+    const refresh=debounce(this.$refs.scroll.refresh,200)
+    this.$bus.$on('imageLoad',()=>{
+      refresh();
+    });
+  },
+  activated(){
+    this.$refs.scroll.refresh();
+    this.$refs.scroll.scrollTo(0,this.leavePosY,0);
+  },
+  deactivated(){
+    this.leavePosY=this.$refs.scroll.getPosY();
+    console.log(this.leavePosY);
   },
   methods: {
     /**
      * 这里是普通事件
      */
+    doImageLoad(){
+      this.tabOffSetTop=this.$refs.tabControl2.$el.offsetTop;
+    },
     goodsClick(index) {
       switch (index) {
         case 0:
@@ -83,9 +109,14 @@ export default {
           this.currentItem = "sell";
           break;
       }
+      this.$refs.tabControl1.curIndex=index;
+      this.$refs.tabControl2.curIndex=index;
     },
     doNowScroll(pos) {
+      //判断回到顶部按钮是否显示
       this.isShowBackTop = Math.abs(pos.y) > 800;
+      //判断第一个tabbar是否显示
+      this.isFirstTabShow=Math.abs(pos.y) > this.tabOffSetTop;
     },
     backToTop() {
       this.$refs.scroll.scrollTo(0, 0, 500);
@@ -105,12 +136,15 @@ export default {
       });
     },
     getHomeGoods(type) {
-      let thisPage = this.goods[type].page + 1;
-      getHomeGoods(type, thisPage).then((res) => {
-        this.goods[type].list.push(...res.data.list);
-        this.goods[type].page = thisPage;
-        this.$refs.scroll.finishPullUp();
-      });
+      const reqData=debounce(()=>{
+        let thisPage = this.goods[type].page + 1;
+        getHomeGoods(type, thisPage).then((res) => {
+          this.goods[type].list.push(...res.data.list);
+          this.goods[type].page = thisPage;
+          this.$refs.scroll.finishPullUp();
+        });
+      },500);
+      reqData();
     },
   },
   computed: {
@@ -123,7 +157,6 @@ export default {
 
 <style scoped>
 .home {
-  padding-top: 44px;
   height: 100vh;
   position: relative;
   /* position: relative; */
@@ -139,5 +172,9 @@ export default {
   bottom: 49px;
   left: 0px;
   right: 0px;
+}
+.firstTabControl{
+  position: relative;
+  z-index: 2;
 }
 </style>

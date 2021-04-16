@@ -1,12 +1,10 @@
 <template>
   <div class="goodslistltem">
-    <a :href="itemMsg.link">
-      <img :src="itemMsg.show.img" alt="">
-      <div class="itemInfo">
-        <p>{{itemMsg.title}}</p>
-        <span class="price">{{itemMsg.price}}</span><span class="collect">赞：{{itemMsg.cfav}}</span>
-      </div>
-    </a>
+    <img :src="itemMsg.show.img" alt="" @load="doLoad">
+    <div class="itemInfo">
+      <p>{{itemMsg.title}}</p>
+      <span class="price">{{itemMsg.price}}</span><span class="collect">赞：{{itemMsg.cfav}}</span>
+    </div>
   </div>
 </template>
 
@@ -17,6 +15,11 @@ export default {
     itemMsg:Object,
     default(){
       return {};
+    }
+  },
+  methods:{
+    doLoad(){
+      this.$bus.$emit('imageLoad');
     }
   }
 };

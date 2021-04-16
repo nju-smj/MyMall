@@ -32,19 +32,31 @@ export default {
       // observeDOM: true,
       probeType: this.probeType
     });
-    this.BScroll.on('scroll',(pos)=>{
-      this.$emit('nowScroll', pos);
-    });
-    this.BScroll.on('pullingUp',()=>{
-      this.$emit('pullingUp');
-    })
+    if(this.probeType==2||this.probeType==3){
+      this.BScroll.on('scroll',(pos)=>{
+        this.$emit('nowScroll', pos);
+      });
+    }
+    if(this.pullUpLoad){
+      this.BScroll.on('pullingUp',()=>{
+        this.$emit('pullingUp');
+      });
+    }
+    
+    // console.log(this.BScroll);
   },
   methods:{
     scrollTo(x,y,time= 500){
-      this.BScroll.scrollTo(x,y,time);
+      this.BScroll && this.BScroll.scrollTo(x,y,time);
     },
     finishPullUp(){
       this.BScroll.finishPullUp();
+    },
+    refresh(){
+      this.BScroll && this.BScroll.refresh();
+    },
+    getPosY(){
+      return this.BScroll? this.BScroll.y:0;
     }
   }
 };

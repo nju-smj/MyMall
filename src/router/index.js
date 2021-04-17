@@ -6,6 +6,7 @@ let Home=()=>import('views/home/home');
 let Category=()=>import('views/category/category');
 let Profile=()=>import('views/profile/profile');
 let Shopcart=()=>import('views/shopcart/shopcart');
+let Detail=()=>import('views/detail/detail');
 const routes = [
   {
     path:'',
@@ -26,6 +27,10 @@ const routes = [
   {
     path:'/shopcart',
     component:Shopcart
+  },
+  {
+    path:'/detail/:iid',
+    component:Detail
   }
 ]
 

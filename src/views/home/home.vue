@@ -88,7 +88,7 @@ export default {
   },
   deactivated(){
     this.leavePosY=this.$refs.scroll.getPosY();
-    console.log(this.leavePosY);
+    // console.log(this.leavePosY);
   },
   methods: {
     /**

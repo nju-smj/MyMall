@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="shop-bottom">
-      <a href="#">进店逛逛</a>
+      <a href="http://www.baidu.com">进店逛逛</a>
     </div>
   </div>
 </template>

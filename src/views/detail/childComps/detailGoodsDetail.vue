@@ -68,5 +68,11 @@ export default {
 }
 .info-list img{
   width: 100%;
+  margin: 2px 0px;
+}
+.info-key{
+  text-align: center;
+  font-size: 16px;
+  padding: 8px 0px;
 }
 </style>

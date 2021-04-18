@@ -30,3 +30,12 @@ export class Seller{
     this.goodsCount=shopInfo.cGoods;
   }
 }
+
+export class Sizes{
+  constructor(itemParams){
+    this.infoKey=itemParams.info.key;
+    this.infoSet=itemParams.info.set;
+    this.ruleKey=itemParams.rule.key;
+    this.ruleTable=itemParams.rule.tables[0];
+  }
+}

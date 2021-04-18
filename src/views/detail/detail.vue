@@ -6,8 +6,8 @@
       <detail-base-info :goodsInfo='goodsInfo'></detail-base-info>
       <detail-seller-info :sellerInfo='sellerInfo'></detail-seller-info>
       <detail-goods-detail :detailInfo='goodsDetail' @detailImageLoad='doDetailRefresh'></detail-goods-detail>
+      <detail-goods-sizes :goodsSize='goodsSize'></detail-goods-sizes>
     </better-scroll>
-    
   </div>
 </template>
 
@@ -17,10 +17,11 @@ import DetailSwiper from './childComps/detailSwpier'
 import DetailBaseInfo from './childComps/detailBaseInfo'
 import DetailSellerInfo from './childComps/detailSellerInfo'
 import DetailGoodsDetail from './childComps/detailGoodsDetail'
+import DetailGoodsSizes from './childComps/detailGoodsSizes'
 
 import BetterScroll from 'components/common/BetterScroll/BetterScroll'
 
-import {getDetailById,GoodsBaseInfo,Seller} from 'network/detail.js'
+import {getDetailById,GoodsBaseInfo,Seller,Sizes} from 'network/detail.js'
 export default {
   name: 'MymallDetail',
   data() {
@@ -29,7 +30,8 @@ export default {
       topSwiper:[],
       goodsInfo:{},
       sellerInfo:{},
-      goodsDetail:{}
+      goodsDetail:{},
+      goodsSize:{}
     };
   },
   created(){
@@ -43,7 +45,10 @@ export default {
       this.sellerInfo=new Seller(data.result.shopInfo);
       //商品详细信息
       this.goodsDetail=data.result.detailInfo;
-      console.log(data);
+      //商品规格信息
+      this.goodsSize=new Sizes(data.result.itemParams);
+      console.log(this.goodsSize);
+      
     })
   },
   components:{
@@ -52,7 +57,8 @@ export default {
     DetailBaseInfo,
     DetailSellerInfo,
     BetterScroll,
-    DetailGoodsDetail
+    DetailGoodsDetail,
+    DetailGoodsSizes
   },
   methods:{
     doDetailRefresh(){

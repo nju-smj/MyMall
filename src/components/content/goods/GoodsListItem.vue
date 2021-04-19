@@ -1,6 +1,6 @@
 <template>
   <div class="goodslistltem" @click="clickToDetail">
-    <img :src="itemMsg.show.img" alt="" @load="doLoad">
+    <img :src="imgSrc" alt="" @load="doLoad">
     <div class="itemInfo">
       <p>{{itemMsg.title}}</p>
       <span class="price">{{itemMsg.price}}</span><span class="collect">赞：{{itemMsg.cfav}}</span>
@@ -17,13 +17,26 @@ export default {
       return {};
     }
   },
+  data(){
+    return {
+      itemId:""
+    }
+  },
+  computed:{
+    imgSrc(){
+      return this.itemMsg.image || this.itemMsg.show.img;
+    }
+  },
   methods:{
     doLoad(){
       this.$bus.$emit('imageLoad');
     },
     clickToDetail(){
-      this.$router.push('/detail/'+this.itemMsg.iid);
+      this.$router.push('/detail/'+this.itemId);
     }
+  },
+  created(){
+    this.itemId=this.itemMsg.iid?this.itemMsg.iid:this.itemMsg.item_id;
   }
 };
 </script>

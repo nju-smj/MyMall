@@ -1,5 +1,5 @@
 <template>
-  <div class="detail-goods-size-table">
+  <div class="detail-goods-size-table" v-if='Object.keys(goodsSize).length!=0'>
     <div class="goods-size-rulekey">{{goodsSize.ruleKey}}</div>
     <table>
       <tr v-for="item1 in goodsSize.ruleTable">
@@ -39,7 +39,7 @@ export default {
   box-shadow: 0px 0px 1px 2px rgba(123, 234, 163, .5);
 }
 .detail-goods-size-table{
-    padding-bottom: 50px;
+    padding-bottom: 20px;
 }
 .detail-goods-size-table table{
   width: 300px;

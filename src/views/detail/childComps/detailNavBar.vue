@@ -30,6 +30,7 @@ export default {
     },
     navItemClick(index){
       this.curIndex=index;
+      this.$emit('navClick', index);
     }
   }
 };

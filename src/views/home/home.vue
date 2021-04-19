@@ -2,9 +2,12 @@
   <div class="home">
     <home-nav class="homeNav"><div slot="middle">蘑菇街</div></home-nav>
     <tab-control
-        :lists="['流行', '新款', '精品']"
-        @goodsClick="goodsClick" ref="tabControl1" class="firstTabControl" v-show="isFirstTabShow"
-      ></tab-control>
+      :lists="['流行', '新款', '精品']"
+      @goodsClick="goodsClick"
+      ref="tabControl1"
+      class="firstTabControl"
+      v-show="isFirstTabShow"
+    ></tab-control>
     <better-scroll
       class="content"
       ref="scroll"
@@ -13,12 +16,13 @@
       @nowScroll="doNowScroll"
       @pullingUp="doPullingUp"
     >
-      <home-swiper :banner="banner" @imageHasLoaded='doImageLoad'></home-swiper>
+      <home-swiper :banner="banner" @imageHasLoaded="doImageLoad"></home-swiper>
       <home-recommend :recommends="recommend"></home-recommend>
       <home-feature></home-feature>
       <tab-control
         :lists="['流行', '新款', '精品']"
-        @goodsClick="goodsClick" ref="tabControl2"
+        @goodsClick="goodsClick"
+        ref="tabControl2"
       ></tab-control>
       <goods-list :goodsList="showItemGoods"></goods-list>
     </better-scroll>
@@ -32,7 +36,6 @@ let HomeNav = () => import("components/common/Navbar/NavBar");
 import BetterScroll from "components/common/BetterScroll/BetterScroll";
 import TabControl from "components/content/tabControl/TabControl";
 import GoodsList from "components/content/goods/GoodsList";
-import BackTop from "components/content/backTop/BackTop";
 
 import HomeSwiper from "./childComps/homeSwiper";
 import HomeRecommend from "./childComps/homeRecommend";
@@ -40,7 +43,8 @@ import HomeFeature from "./childComps/homeFeature";
 
 import { getHomeMultidata, getHomeGoods } from "network/home.js";
 
-import {debounce} from 'common/tools'
+import { debounce } from "common/tools";
+import { itemListenerMixin, backtoTopMixin } from "common/mixin";
 export default {
   name: "MymallHome",
   components: {
@@ -51,7 +55,6 @@ export default {
     TabControl,
     GoodsList,
     BetterScroll,
-    BackTop,
   },
   data() {
     return {
@@ -63,10 +66,9 @@ export default {
         sell: { page: 0, list: [] },
       },
       currentItem: "pop",
-      isShowBackTop: false,
       isFirstTabShow: false,
       tabOffSetTop: 0,
-      leavePosY: 0
+      leavePosY: 0,
     };
   },
   created() {
@@ -76,26 +78,22 @@ export default {
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
   },
-  mounted(){
-    const refresh=debounce(this.$refs.scroll.refresh,200)
-    this.$bus.$on('imageLoad',()=>{
-      refresh();
-    });
-  },
-  activated(){
+  mixins: [itemListenerMixin, backtoTopMixin],
+  mounted() {},
+  activated() {
     this.$refs.scroll.refresh();
-    this.$refs.scroll.scrollTo(0,this.leavePosY,0);
+    this.$refs.scroll.scrollTo(0, this.leavePosY, 0);
   },
-  deactivated(){
-    this.leavePosY=this.$refs.scroll.getPosY();
+  deactivated() {
+    this.leavePosY = this.$refs.scroll.getPosY();
     // console.log(this.leavePosY);
   },
   methods: {
     /**
      * 这里是普通事件
      */
-    doImageLoad(){
-      this.tabOffSetTop=this.$refs.tabControl2.$el.offsetTop;
+    doImageLoad() {
+      this.tabOffSetTop = this.$refs.tabControl2.$el.offsetTop;
     },
     goodsClick(index) {
       switch (index) {
@@ -109,17 +107,14 @@ export default {
           this.currentItem = "sell";
           break;
       }
-      this.$refs.tabControl1.curIndex=index;
-      this.$refs.tabControl2.curIndex=index;
+      this.$refs.tabControl1.curIndex = index;
+      this.$refs.tabControl2.curIndex = index;
     },
     doNowScroll(pos) {
       //判断回到顶部按钮是否显示
       this.isShowBackTop = Math.abs(pos.y) > 800;
       //判断第一个tabbar是否显示
-      this.isFirstTabShow=Math.abs(pos.y) > this.tabOffSetTop;
-    },
-    backToTop() {
-      this.$refs.scroll.scrollTo(0, 0, 500);
+      this.isFirstTabShow = Math.abs(pos.y) > this.tabOffSetTop;
     },
     doPullingUp() {
       console.log("loadmore");
@@ -136,14 +131,14 @@ export default {
       });
     },
     getHomeGoods(type) {
-      const reqData=debounce(()=>{
+      const reqData = debounce(() => {
         let thisPage = this.goods[type].page + 1;
         getHomeGoods(type, thisPage).then((res) => {
           this.goods[type].list.push(...res.data.list);
           this.goods[type].page = thisPage;
           this.$refs.scroll.finishPullUp();
         });
-      },500);
+      }, 500);
       reqData();
     },
   },
@@ -173,7 +168,7 @@ export default {
   left: 0px;
   right: 0px;
 }
-.firstTabControl{
+.firstTabControl {
   position: relative;
   z-index: 2;
 }

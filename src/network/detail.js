@@ -39,3 +39,8 @@ export class Sizes{
     this.ruleTable=itemParams.rule.tables[0];
   }
 }
+export function getRecommend(){
+  return request({
+    url:'/recommend'
+  });
+}

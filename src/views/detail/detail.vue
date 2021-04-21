@@ -1,6 +1,7 @@
 <template>
   <div id="detail">
     <detail-nav-bar class="detailNav" @navClick="doNavClick" ref="detailNav"></detail-nav-bar>
+    <!-- <div>{{$store.state.cartList}}</div> -->
     <better-scroll class="datailBS" ref="scroll" @nowScroll='contentScroll' :probeType='3'>
       <detail-swiper :topImages="topSwiper"></detail-swiper>
       <detail-base-info :goodsInfo="goodsInfo"></detail-base-info>
@@ -19,6 +20,7 @@
     </better-scroll>
     <detail-bottom-nav-bar class="bottomNav" @addToCart='doAddToCart'></detail-bottom-nav-bar>
     <back-top @click.native="backToTop" v-show="isShowBackTop"></back-top>
+    <toast></toast>
   </div>
 </template>
 
@@ -34,8 +36,10 @@ import DetailCommentInfo from "./childComps/detailCommentInfo";
 import DetailBottomNavBar from './childComps/detailBottomNavBar'
 
 import GoodsList from "components/content/goods/GoodsList";
+import Toast from 'components/content/toast/Toast'
 
 import BetterScroll from "components/common/BetterScroll/BetterScroll";
+
 
 import {
   getDetailById,
@@ -47,6 +51,7 @@ import {
 
 import { itemListenerMixin,backtoTopMixin} from "common/mixin";
 import { debounce } from 'common/tools'
+import { mapActions } from 'vuex'
 export default {
   name: "MymallDetail",
   data() {
@@ -61,7 +66,7 @@ export default {
       recommend: [],
       navItemYs: [],
       navItemsGetYsDebounce: null,
-      currentIndex: 0
+      currentIndex: 0,
     };
   },
   created() {
@@ -97,8 +102,8 @@ export default {
         }
       }
       this.commentInfo={'num':data.result.rate.cRate,'list':list};
-      console.log(data);
-      console.log(this.commentInfo);
+      // console.log(data);
+      // console.log(this.commentInfo);
     });
     //获取推荐数据
     getRecommend().then((res) => {
@@ -116,9 +121,11 @@ export default {
     DetailGoodsSizes,
     DetailCommentInfo,
     GoodsList,
-    DetailBottomNavBar
+    DetailBottomNavBar,
+    Toast
   },
   methods: {
+    ...mapActions(['addToCart']),
     doDetailRefresh() {
       this.$refs.scroll.refresh();
       this.navItemsGetYsDebounce();
@@ -147,7 +154,10 @@ export default {
       productMsg.title=this.goodsInfo.title;
       productMsg.price=this.goodsInfo.realPrice;
       productMsg.iid=this.productId;
-      console.log(productMsg);
+      // console.log(productMsg);
+      this.addToCart(productMsg).then(value=>{
+        this.$toast.show(value,1500);
+      });
     }
   },
   mixins: [itemListenerMixin,backtoTopMixin],

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <keep-alive exclude="MymallDetail">
       <router-view></router-view>
     </keep-alive>
@@ -12,7 +12,6 @@ require('es6-promise').polyfill();
 require('es6-promise/auto');
 import MainTabBar from './components/content/MainTabBar'
 export default {
-  el:'#app',
   components:{
     MainTabBar
   }

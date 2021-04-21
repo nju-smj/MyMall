@@ -20,6 +20,13 @@
       "unicode_decimal": 13387
     },
     {
+      "icon_id": "632972",
+      "name": "未选中",
+      "font_class": "2weixuanzhong",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
       "icon_id": "689261",
       "name": "类目 品类 分类 类别.2",
       "font_class": "leimupinleifenleileibie2",
@@ -39,6 +46,13 @@
       "font_class": "my",
       "unicode": "e687",
       "unicode_decimal": 59015
+    },
+    {
+      "icon_id": "1020319",
+      "name": "选中",
+      "font_class": "xuanzhong",
+      "unicode": "e656",
+      "unicode_decimal": 58966
     },
     {
       "icon_id": "1287692",

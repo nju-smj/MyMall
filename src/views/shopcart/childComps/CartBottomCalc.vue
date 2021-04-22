@@ -26,7 +26,7 @@ export default {
         .filter((item) => item.checked)
         .reduce((iter, nowItem) => {
           return iter + nowItem.count * nowItem.price;
-        }, 0);
+        }, 0).toFixed(2);
     },
     goodsNum() {
       return this.$store.state.cartList.filter((item) => item.checked).length;
@@ -69,8 +69,8 @@ export default {
   font-size: 14px;
 }
 .bottom-clac-left {
-  width: 70px;
-  padding-left: 7px;
+  width: 80px;
+  padding-left: 20px;
 }
 .bottom-clac-left span:last-child {
   padding-left: 5px;

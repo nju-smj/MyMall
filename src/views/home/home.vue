@@ -117,7 +117,7 @@ export default {
       this.isFirstTabShow = Math.abs(pos.y) > this.tabOffSetTop;
     },
     doPullingUp() {
-      console.log("loadmore");
+      // console.log("loadmore");
       this.getHomeGoods(this.currentItem);
       this.$refs.scroll.BScroll.refresh();
     },

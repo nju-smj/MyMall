@@ -1,7 +1,7 @@
 import Toast from './Toast'
 let obj={};
 obj.install=(Vue)=>{
-  console.log('-------');
+  // console.log('-------');
   let toastConstrutor=Vue.extend(Toast);
   let ToastInstance=new toastConstrutor();
   ToastInstance.$mount(document.createElement('div'));

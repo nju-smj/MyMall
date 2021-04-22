@@ -1,6 +1,6 @@
 <template>
-  <div class="goodslistltem" @click="clickToDetail">
-    <img :src="imgSrc" alt="" @load="doLoad">
+  <div class="goodslistltem" @click="clickToDetail" v-if="Object.keys(itemMsg).length!=0">
+    <img v-lazy="imgSrc" alt="" @load="doLoad">
     <div class="itemInfo">
       <p>{{itemMsg.title}}</p>
       <span class="price">{{itemMsg.price}}</span><span class="collect">赞：{{itemMsg.cfav}}</span>
@@ -24,7 +24,7 @@ export default {
   },
   computed:{
     imgSrc(){
-      return this.itemMsg.image || this.itemMsg.show.img;
+      return this.itemMsg.img || this.itemMsg.image || this.itemMsg.show.img;
     }
   },
   methods:{

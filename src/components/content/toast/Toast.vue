@@ -34,7 +34,7 @@ export default {
   background-color: rgba(0, 0, 0, .7);
   color: white;
   transform: translate(-50%,-50%);
-  padding: 5px 10px;
+  padding: 10px 15px;
   border-radius: 10px;
   z-index: 999;
 }

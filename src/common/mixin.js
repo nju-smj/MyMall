@@ -18,7 +18,11 @@ export const backtoTopMixin={
   },
   methods: {
     backToTop() {
-      this.$refs.scroll.scrollTo(0, 0, 500);
+      if(this.$refs.scroll){
+        this.$refs.scroll.scrollTo(0, 0, 500);
+      }else if(this.$refs.categoryBs2){
+        this.$refs.categoryBs2.scrollTo(0, 0, 500);
+      }
     }
   },
 }

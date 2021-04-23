@@ -2,7 +2,7 @@
   <div class="category-right-top">
     <div v-for="(item,index) in topItems" :key="index">
       <div class="RT-item">
-        <a :href="item.link"><img :src="item.image"></a>
+        <a :href="item.link"><img :src="item.image" @load="doLoad"></a>
         <div>{{item.title}}</div>
       </div>
     </div>
@@ -16,6 +16,11 @@ export default {
     topItems:{
       type: Array,
       default:[]
+    }
+  },
+  methods:{
+    doLoad(){
+      this.$emit('topRightLoad');
     }
   }
 };

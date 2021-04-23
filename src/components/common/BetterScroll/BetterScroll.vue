@@ -54,6 +54,7 @@ export default {
     },
     refresh(){
       this.BScroll && this.BScroll.refresh();
+      console.log('-----');
     },
     getPosY(){
       return this.BScroll? this.BScroll.y:0;

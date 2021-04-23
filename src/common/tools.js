@@ -9,3 +9,13 @@ export function debounce(func,delay){
     },delay);
   }
 }
+export function throttle(func,delay){
+  let begin=0;
+  return function(...args){
+    let cur=new Date().getTime();
+    if(cur-begin > delay){
+      func.apply(this,args);
+      begin=cur;
+    }
+  }
+}

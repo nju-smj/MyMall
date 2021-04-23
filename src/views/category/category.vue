@@ -9,21 +9,43 @@
           :curIndex="parseInt(curIndex)"
         ></category-left-cards>
       </better-scroll>
-      <better-scroll :probeType="3" class="category-bs-2 category-middle-right" ref="categoryBs2" @nowScroll="doNowScroll">
-        <category-right-list :goods-list='rightGoods' ></category-right-list>
+      <better-scroll
+        :probeType="3"
+        class="category-bs-2 category-middle-right"
+        ref="categoryBs2"
+        @nowScroll="doNowScroll"
+      >
+        <category-right-list :goods-list="rightGoods" @topRightImgLoad='doTRLoad'
+        @firstTabClick='doFirTabClick'
+        ref="categoryRL"
+        ></category-right-list>
       </better-scroll>
     </div>
+    <tab-control
+      :lists="['流行', '新款', '精品']"
+      class="category-tab-control-2"
+      v-show="isTab2Show"
+      ref="categoryTab2"
+      @goodsClick="goodsClick"
+    ></tab-control>
+    <back-top v-show="isBackToTopShow" @click.native="backToTop"></back-top>
   </div>
 </template>
 
 <script>
 import BetterScroll from "components/common/BetterScroll/BetterScroll";
 
+import TabControl from "components/content/tabControl/TabControl";
+
 import CategoryNavBar from "./childComps/categoryNavBar";
 import CategoryLeftCards from "./childComps/categoryLeftCards";
 import CategoryRightList from "./childComps/categoryRightList";
 
+import BackTop from 'components/content/backTop/BackTop'
+import {backtoTopMixin} from 'common/mixin'
+
 import { getTypes, getGoodsByKey, getSubTypeDetail } from "network/category";
+import {throttle} from 'common/tools'
 export default {
   name: "MymallCategory",
   data() {
@@ -32,6 +54,9 @@ export default {
       curIndex: 0,
       subCurIndex: 0,
       rightGoods: { top: [], new: [], sell: [], pop: [] },
+      isTab2Show: false,
+      firstTabPosY: 0,
+      isBackToTopShow: false
     };
   },
   components: {
@@ -39,14 +64,16 @@ export default {
     CategoryLeftCards,
     BetterScroll,
     CategoryRightList,
+    TabControl,
+    BackTop
   },
   created() {
     //获取所有子分类
     getTypes()
       .then((res) => {
         this.allTypes = res.data.category.list;
-        console.log(this.allTypes);
-        console.log("---------");
+        // console.log(this.allTypes);
+        // console.log("---------");
       })
       .then(() => {
         //获取第一个类的数据
@@ -65,7 +92,7 @@ export default {
         this.rightGoods.new = res[0];
         this.rightGoods.pop = res[1];
         this.rightGoods.sell = res[2];
-        console.log(this.rightGoods);
+        // console.log(this.rightGoods);
       });
   },
   methods: {
@@ -92,11 +119,27 @@ export default {
             this.rightGoods.sell = res[2];
           });
       }
+      this.firstTabPosY=this.$refs.categoryBs2.$el.querySelector('.category-tab-control').offsetTop;
     },
-    doNowScroll(){
-      this.$refs.categoryBs2.refresh();
+    throttleRefresh(){
+      return throttle(this.$refs.categoryBs2.refresh,1000);
+    },
+    doNowScroll(pos) {
+      this.throttleRefresh();
+      this.isTab2Show= -pos.y>=this.firstTabPosY;
+      this.isBackToTopShow= pos.y<-1000;
+    },
+    doTRLoad(){
+      this.firstTabPosY=this.$refs.categoryBs2.$el.querySelector('.category-tab-control').offsetTop;
+    },
+    doFirTabClick(index){
+      this.$refs.categoryTab2.curIndex=index;
+    },
+    goodsClick(index){
+      this.$refs.categoryRL.$refs.categoryRLTab.curIndex=index;
     }
   },
+  mixins:[backtoTopMixin]
 };
 </script>
 
@@ -104,6 +147,7 @@ export default {
 .category {
   height: 100vh;
   width: 100vw;
+  position: relative;
 }
 .category-nav {
   background-color: var(--color-tint);
@@ -113,16 +157,22 @@ export default {
   height: 100%;
   overflow: hidden;
 }
-.category-bs-2{
+.category-bs-2 {
   height: 100%;
 }
-.category-middle{
+.category-middle {
   display: flex;
   height: calc(100% - 44px - 49px);
 }
-.category-middle-right{
+.category-middle-right {
   flex: 1;
   height: 100%;
   overflow: hidden;
+}
+.category-tab-control-2 {
+  position: absolute;
+  top: 44px;
+  left: 100px;
+  right: 0px;
 }
 </style>

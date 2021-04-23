@@ -10,7 +10,7 @@
       <div class="comment">{{commentInfo.list.content}}</div>
       <span class="comment-time">{{fomatTime}}</span><span class="comment-style">{{commentInfo.list.style}}</span>
     </div>
-    <div class="comment-imgs" v-if="commentInfo.list.images.length>0">
+    <div class="comment-imgs" v-if="commentInfo.list">
       <img :src="item" alt="" v-for="(item,index) in commentInfo.list.images" :key="index">     
     </div>
   </div>

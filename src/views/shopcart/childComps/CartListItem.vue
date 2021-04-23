@@ -1,6 +1,6 @@
 <template>
-  <div class="cart-list-item">
-    <div class="selector" @click="selectorClick">
+  <div class="cart-list-item"  @click="selectorClick">
+    <div class="selector">
       <span class="iconfont icon-xuanzhong" v-if="product.checked"></span>
       <span v-else class="iconfont icon-2weixuanzhong"></span>
     </div>

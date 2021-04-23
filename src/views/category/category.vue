@@ -137,6 +137,7 @@ export default {
     },
     goodsClick(index){
       this.$refs.categoryRL.$refs.categoryRLTab.curIndex=index;
+      this.$refs.categoryRL.subCurIndex=index;
     }
   },
   mixins:[backtoTopMixin]

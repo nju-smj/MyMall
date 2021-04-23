@@ -1,5 +1,5 @@
 <template>
-  <swiper class="topSwiper" :interval='1000'>
+  <swiper class="topSwiper" :interval='1500'>
     <swiper-item v-for="(item,index) in topImages" :key="index">
       <img :src="item" alt="">
     </swiper-item>

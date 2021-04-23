@@ -103,7 +103,7 @@ export default {
       }
       this.commentInfo={'num':data.result.rate.cRate,'list':list};
       // console.log(data);
-      // console.log(this.commentInfo);
+      console.log(this.commentInfo);
     });
     //获取推荐数据
     getRecommend().then((res) => {

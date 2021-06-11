@@ -1,9 +1,10 @@
 <template>
   <div class="goodslistltem" @click="listItemClick">
-    <img :src="itemData.show.img" @load="itemImgLoad">
+    <img :src="showImg" @load="itemImgLoad" />
     <div class="itemInfo">
-      <p>{{itemData.title}}</p>
-      <span class="price">{{itemData.price}}</span><span class="collect">赞：{{itemData.cfav}}</span>
+      <p>{{ itemData.title }}</p>
+      <span class="price">{{ itemData.price }}</span
+      ><span class="collect">赞：{{ itemData.cfav }}</span>
     </div>
   </div>
 </template>
@@ -11,6 +12,11 @@
 <script>
 export default {
   name: 'MyMallGoodslistitem',
+  data(){
+    return {
+      id: ""
+    }
+  },
   props:{
     itemData:{
       type: Object,
@@ -27,25 +33,41 @@ export default {
       this.$router.push({
         path: '/detail',
         query: {
-          id:this.itemData.iid
+          id:this.id
         }
       })
+    }
+  },
+  computed:{
+    showImg(){
+      if(this.itemData.show){
+        return this.itemData.show.img;
+      }else if(this.itemData.image){
+        return this.itemData.image;
+      }
+    }
+  },
+  created(){
+    if(this.itemData.iid){
+      this.id=this.itemData.iid;
+    }else if(this.itemData.item_id){
+      this.id=this.itemData.item_id;
     }
   }
 };
 </script>
 
 <style scoped>
-.goodslistltem{
+.goodslistltem {
   padding-bottom: 40px;
   position: relative;
   width: 45%;
 }
-.goodslistltem img{
+.goodslistltem img {
   width: 100%;
   border-radius: 5px;
 }
-.itemInfo{
+.itemInfo {
   font-size: 12px;
   position: absolute;
   bottom: 5px;
@@ -54,13 +76,13 @@ export default {
   overflow: hidden;
   text-align: center;
 }
-.itemInfo p{
+.itemInfo p {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   margin-bottom: 3px;
 }
-.itemInfo .price{
+.itemInfo .price {
   color: var(--color-high-text);
   margin-right: 20px;
 }

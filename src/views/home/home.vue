@@ -14,7 +14,7 @@
     ></tab-control>
     <scroll
       class="content-scroll"
-      ref="homeScroll"
+      ref="scroll"
       :probe-type="3"
       :pullUpLoad="true"
       @bsScroll="doScroll"
@@ -34,7 +34,7 @@
       ></tab-control>
       <goods-list :list="showedGoods"></goods-list>
     </scroll>
-    <back-top @click.native="backClick" v-show="isShowBackTop" />
+    <back-top @click.native="backToTop" v-show="isShowBackTop" />
   </div>
 </template>
 
@@ -48,7 +48,7 @@ const TabControl = () => import("components/content/TabControl.vue");
 import GoodsList from "components/content/GoodsList.vue";
 import Scroll from "components/common/Scroll/Scroll.vue";
 import BackTop from "components/content/BackTop.vue";
-import { debounce } from "common/tools";
+import { itemListenerMixin, backtoTopMixin} from "common/mixin";
 export default {
   name: "MymallHome",
   components: {
@@ -71,10 +71,9 @@ export default {
         sell: { page: 0, list: [] },
       },
       currentType: "pop",
-      isShowBackTop: false,
       tabControlTop: 0,
       isTabControlShow: false,
-      saveY: 0
+      saveY: 0,
     };
   },
   computed: {
@@ -88,20 +87,13 @@ export default {
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
   },
-  mounted() {
-    this.$bus.$on(
-      "itemImgLoad",
-      debounce(() => {
-        this.$refs.homeScroll.refresh();
-      }, 200)
-    );
+  activated() {
+    this.$refs.scroll.refresh();
+    this.$refs.scroll.moveTo(0, this.saveY, 0);
   },
-  activated(){
-    this.$refs.homeScroll.refresh();
-    this.$refs.homeScroll.moveTo(0,this.saveY,0);
-  },
-  deactivated(){
-    this.saveY=this.$refs.homeScroll.getSaveY();
+  deactivated() {
+    this.saveY = this.$refs.scroll.getSaveY();
+    this.$bus.$off("itemImgLoad", this.itemImgListener);
   },
   methods: {
     getHomeMultidata() {
@@ -115,7 +107,7 @@ export default {
       getHomeGoods(type, thisPage).then((res) => {
         this.goods[type].list.push(...res.data.list);
         this.goods[type].page = thisPage;
-        this.$refs.homeScroll.finishPullUp();
+        this.$refs.scroll.finishPullUp();
       });
     },
     doTabClick(index) {
@@ -130,11 +122,8 @@ export default {
           this.currentType = "sell";
           break;
       }
-      this.$refs.tabControlFake.currentIndex=index;
-      this.$refs.tabControl.currentIndex=index;
-    },
-    backClick() {
-      this.$refs.homeScroll.moveTo(0, 0);
+      this.$refs.tabControlFake.currentIndex = index;
+      this.$refs.tabControl.currentIndex = index;
     },
     doScroll(pos) {
       this.isShowBackTop = pos.y < -1000 ? true : false;
@@ -148,6 +137,7 @@ export default {
       this.tabControlTop = this.$refs.tabControl.$el.offsetTop;
     },
   },
+  mixins: [itemListenerMixin, backtoTopMixin]
 };
 </script>
 
@@ -166,7 +156,7 @@ export default {
   bottom: 49px;
   overflow: hidden;
 }
-.tab-control-fake{
+.tab-control-fake {
   position: relative;
   z-index: 10;
 }

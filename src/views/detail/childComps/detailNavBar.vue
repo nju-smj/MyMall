@@ -1,8 +1,8 @@
 <template>
   <nav-bar>
     <template v-slot:left>
-      <div class="datail-nav-left">
-        <img src="~assets/img/detail/back.svg" alt="" @click="backClick" />
+      <div class="datail-nav-left" @click="backClick">
+        <img src="~assets/img/detail/back.svg" alt=""/>
       </div>
     </template>
     <template v-slot:center>
@@ -39,6 +39,7 @@ export default {
   methods: {
     navItemClick(index) {
       this.curIndex = index;
+      this.$emit('navClick', index);
     },
     backClick() {
       this.$router.back();

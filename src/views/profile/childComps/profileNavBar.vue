@@ -3,7 +3,7 @@
     <nav-bar class="profile-nav-bar">
       <template v-slot:middle>
         <div class="profile-title">
-          我的档案
+          我的
         </div>
       </template>
     </nav-bar>

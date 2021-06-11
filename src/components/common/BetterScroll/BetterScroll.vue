@@ -29,7 +29,7 @@ export default {
     this.BScroll=new BScroll(this.$refs.bscroll,{
       pullUpLoad: this.pullUpLoad,
       click: true,
-      // observeDOM: true,
+      observeDOM: true,
       probeType: this.probeType
     });
     if(this.probeType==2||this.probeType==3){
@@ -54,7 +54,6 @@ export default {
     },
     refresh(){
       this.BScroll && this.BScroll.refresh();
-      // console.log('-----');
     },
     getPosY(){
       return this.BScroll? this.BScroll.y:0;

@@ -78,21 +78,24 @@ export default {
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
   },
+  mounted(){
+    this.$bus.$on('imageLoad',debounce(()=>{
+      this.$refs.scroll.refresh();
+    },200));
+  },
   mixins: [itemListenerMixin, backtoTopMixin],
-  mounted() {},
   activated() {
     this.$refs.scroll.refresh();
     this.$refs.scroll.scrollTo(0, this.leavePosY, 0);
   },
   deactivated() {
     this.leavePosY = this.$refs.scroll.getPosY();
-    // console.log(this.leavePosY);
   },
   methods: {
     /**
      * 这里是普通事件
      */
-    doImageLoad() {
+    doImageLoad(){
       this.tabOffSetTop = this.$refs.tabControl2.$el.offsetTop;
     },
     goodsClick(index) {

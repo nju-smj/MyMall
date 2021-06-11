@@ -94,6 +94,10 @@ export default {
         this.rightGoods.sell = res[2];
       });
   },
+  activated(){
+    this.$refs.categoryBs.refresh();
+    this.$refs.categoryBs2.refresh();
+  },
   methods: {
     doTypeItemClick(index) {
       if (this.curIndex != index) {

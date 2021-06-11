@@ -5,7 +5,7 @@
       <span v-else class="iconfont icon-2weixuanzhong"></span>
     </div>
     <div class="cart-img">
-      <img v-lazy="product.img" alt="">
+      <img :src="product.img" alt="">
     </div>
     <div class="description">
       <div class="cart-prod-title">{{product.title}}</div>

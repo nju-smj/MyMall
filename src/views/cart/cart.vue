@@ -44,7 +44,7 @@ export default {
   height: 100vh;
 }
 .cart-nav-bar{
-  background-color: var(--color-high-text);
+  background-color: var(--color-tint);
   color: white;
 }
 .cart-scroll{

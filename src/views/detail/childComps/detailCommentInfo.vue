@@ -5,13 +5,13 @@
       <span v-if="commentInfo.num>1" class="iconfont icon-gengduo"></span>
     </div>
     <div class="comment-val" v-if="commentInfo.num>=1">
-      <img :src="commentInfo.list.user.avatar" alt="">
+      <img v-lazy="commentInfo.list.user.avatar" alt="">
       <span class="comment-id">{{commentInfo.list.user.uname}}</span>
       <div class="comment">{{commentInfo.list.content}}</div>
       <span class="comment-time">{{fomatTime}}</span><span class="comment-style">{{commentInfo.list.style}}</span>
     </div>
     <div class="comment-imgs" v-if="commentInfo.list">
-      <img :src="item" alt="" v-for="(item,index) in commentInfo.list.images" :key="index">     
+      <img v-lazy="item" alt="" v-for="(item,index) in commentInfo.list.images" :key="index">     
     </div>
   </div>
 </template>

@@ -49,6 +49,7 @@ import DetailBottomNavBar from './childComps/detailBottomNavBar.vue'
 import { debounce } from "common/tools";
 import { itemListenerMixin,backtoTopMixin} from "common/mixin";
 import Vue from "vue";
+import { mapActions } from 'vuex'
 import {
   getDetailById,
   GoodsBaseInfo,
@@ -125,6 +126,7 @@ export default {
   watch: {},
   computed: {},
   methods: {
+    ...mapActions(['addToCart']),
     doDetailRefresh() {
       this.$refs.scroll.refresh();
       this.navItemsGetYsDebounce();
@@ -135,7 +137,6 @@ export default {
     contentScroll(pos){
       let posY=pos.y;
       let length=this.navItemYs.length;
-      // console.log(this.navItemYs+" "+posY);
       for(let index in this.navItemYs){
         index=parseInt(index);
         if((this.currentIndex!=index)&&(index<length-1 && posY<=-this.navItemYs[index] && posY>-this.navItemYs[index+1]) || (index==length-1&&posY<=-this.navItemYs[index])){
@@ -152,11 +153,9 @@ export default {
       productMsg.title=this.goodsInfo.title;
       productMsg.price=this.goodsInfo.realPrice;
       productMsg.iid=this.id;
-      // console.log(productMsg);
-      // this.addToCart(productMsg).then(value=>{
-      //   this.$toast.show(value,1500);
-      // });
-      this.$store.dispatch('addToCart', productMsg);
+      this.addToCart(productMsg).then(res=>{
+         this.$toast.show(res,1500);
+      });
     }
   },
   mixins: [itemListenerMixin,backtoTopMixin]

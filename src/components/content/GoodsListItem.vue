@@ -1,10 +1,10 @@
 <template>
   <div class="goodslistltem" @click="listItemClick">
-    <img :src="showImg" @load="itemImgLoad" />
+    <img v-lazy="showImg" @load="itemImgLoad" />
     <div class="itemInfo">
       <p>{{ itemData.title }}</p>
-      <span class="price">{{ itemData.price }}</span
-      ><span class="collect">赞：{{ itemData.cfav }}</span>
+      <span class="price">{{ itemDataPrice }} </span
+      ><span class="collect">赞：{{ itemDataCfav }}</span>
     </div>
   </div>
 </template>
@@ -44,8 +44,21 @@ export default {
         return this.itemData.show.img;
       }else if(this.itemData.image){
         return this.itemData.image;
+      }else if(this.itemData){
+        return this.itemData.img;
       }
+    },
+    itemDataPrice(){
+      return '￥'+parseFloat(this.itemData.price).toFixed(2);
+    },
+    itemDataCfav(){
+      let num=this.itemData.cfav;
+      if(num>=10000){
+        return parseInt(num/10000)+'w+'
+      }
+      return num;
     }
+    
   },
   created(){
     if(this.itemData.iid){
@@ -84,6 +97,5 @@ export default {
 }
 .itemInfo .price {
   color: var(--color-high-text);
-  margin-right: 20px;
 }
 </style>
